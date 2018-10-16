@@ -9,6 +9,7 @@ So we will perform following tasks
   - [Teardown the AWS Cluster and Start a new one with same settings on GCP](#teardown-the-aws-cluster-and-start-a-new-one-with-same-settings-on-gcp)
   - [Update 1.11.5 => 1.11.6](#update-1115--1116)
   - [Go from Open Source to Enterprise](#go-from-open-source-to-enterprise)
+- [Cleanup the demo](#cleanup-the-demo)
 
 <!-- TOC END -->
 
@@ -18,6 +19,12 @@ So we will perform following tasks
 We start with this [main.tf](./main.tf)
 
 Prerequisites are a properly setup cloud tooling e.g. credentials, default region or default profile
+
+First we need to initialize our modules. Terraform now receives all modules from the registry and installs all necessary provider binaries.
+
+```
+$ terraform init
+```
 
 ```hcl
 variable "dcos_install_mode" {
@@ -135,4 +142,12 @@ this is also an upgrade ( same version upgrade )
 
 ```
 $ terraform apply -var dcos_install_mode=upgrade
+```
+
+
+# Cleanup the demo
+```
+$ terraform destroy
+$ git checkout -- main.tf
+$ rm -R .terraform
 ```
