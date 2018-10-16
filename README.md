@@ -1,4 +1,4 @@
-# Mesospher DEMO Day
+# Mesosphere DEMO Day
 This demo will show DC/OS Terraform
 
 So we will perform following tasks
@@ -96,6 +96,12 @@ module "dcos" {
   # ...
 }
 # ...
+```
+
+Initialize the new GCP modules.
+
+```
+$ terraform init
 ```
 
 another apply will destroy the AWS cluster and create a new GCP one.
