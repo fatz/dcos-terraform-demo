@@ -21,7 +21,7 @@ module "dcos" {
   num_private_agents = "2"
   num_public_agents  = "1"
 
-  dcos_version = "1.11.4"
+  dcos_version = "1.11.5"
   dcos_variant = "open"
 
   # dcos_variant              = "ee"
