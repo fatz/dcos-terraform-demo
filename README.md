@@ -1,4 +1,4 @@
-# Mesospher DEMO Day
+# Mesosphere DEMO Day
 This demo will show DC/OS Terraform. The purpose of the DC/OS Terraform project is to provide users with a flexible, simple and universal way to provision and manage DC/OS across multiple cloud providers. This project supports both the Open Source version and the Enterprise version. 
 
 So we will perform the following tasks:
