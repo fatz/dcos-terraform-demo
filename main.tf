@@ -28,7 +28,6 @@ module "dcos" {
   # dcos_license_key_contents = "${file("./license.txt")}"
 
   dcos_install_mode = "${var.dcos_install_mode}"
-  dcos_instance_os  = "centos_7.3"
   providers {
     "aws"    = "aws"
     "google" = "google"
