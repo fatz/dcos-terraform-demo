@@ -1,10 +1,10 @@
-# Mesospher DEMO Day
-This demo will show DC/OS Terraform
+# Mesosphere DEMO Day
+This demo will show DC/OS Terraform. The purpose of the DC/OS Terraform project is to provide users with a flexible, simple and universal way to provision and manage DC/OS across multiple cloud providers. This project supports both the Open Source version and the Enterprise version. 
 
-So we will perform following tasks
+So we will perform the following tasks:
 
 <!-- TOC START min:1 max:3 link:true update:true -->
-- [Mesospher DEMO Day](#mesospher-demo-day)
+- [Mesosphere DEMO Day](#mesospher-demo-day)
   - [Start a cluster on AWS ( 1.11.5 )](#start-a-cluster-on-aws--1115-)
   - [Teardown the AWS Cluster and Start a new one with same settings on GCP](#teardown-the-aws-cluster-and-start-a-new-one-with-same-settings-on-gcp)
   - [Update 1.11.5 => 1.11.6](#update-1115--1116)
@@ -14,17 +14,10 @@ So we will perform following tasks
 <!-- TOC END -->
 
 
-
 ## Start a cluster on AWS ( 1.11.5 )
+Prerequisites are a properly setup cloud tooling e.g. credentials, default region or default profile. See the following [AWS](https://github.com/dcos-terraform/terraform-aws-dcos/tree/master/docs/quickstart#ensure-you-have-your-aws-cloud-credentials-properly-set-up) and [GCP](https://github.com/dcos-terraform/terraform-gcp-dcos/tree/master/docs/quickstart#ensure-you-have-default-application-credentials) quickstarts for more info on auth.
+
 We start with this [main.tf](./main.tf)
-
-Prerequisites are a properly setup cloud tooling e.g. credentials, default region or default profile
-
-First we need to initialize our modules. Terraform now receives all modules from the registry and installs all necessary provider binaries.
-
-```
-$ terraform init
-```
 
 ```hcl
 variable "dcos_install_mode" {
@@ -36,13 +29,11 @@ data "http" "whatismyip" {
   url = "http://whatismyip.akamai.com/"
 }
 
-provider "aws" {}
-provider "google" {}
-
 module "dcos" {
   source = "dcos-terraform/dcos/aws"
 
-  cluster_name        = "mesosphere-demo-day"
+  dcos_instance_os    = "coreos_1235.9.0"
+  cluster_name        = "my-open-dcos"
   ssh_public_key_file = "~/.ssh/id_rsa.pub"
   admin_ips           = ["${data.http.whatismyip.body}/32"]
 
@@ -50,18 +41,13 @@ module "dcos" {
   num_private_agents = "2"
   num_public_agents  = "1"
 
-  dcos_version = "1.11.5"
-  dcos_variant = "open"
+  dcos_version = "1.11.4"
 
   # dcos_variant              = "ee"
   # dcos_license_key_contents = "${file("./license.txt")}"
+  dcos_variant = "open"
 
   dcos_install_mode = "${var.dcos_install_mode}"
-  dcos_instance_os  = "centos_7.3"
-  providers {
-    "aws"    = "aws"
-    "google" = "google"
-  }
 }
 
 output "masters-ips" {
@@ -76,6 +62,12 @@ output "public-agents-loadbalancer" {
   value = "${module.dcos.public-agents-loadbalancer}"
 }
 
+```
+
+First we need to initialize our modules. Terraform now receives all modules from the registry and installs all necessary provider binaries.
+
+```
+$ terraform init
 ```
 
 now apply this and boot the cluster
@@ -98,7 +90,13 @@ module "dcos" {
 # ...
 ```
 
-another apply will destroy the AWS cluster and create a new GCP one.
+Inialize all the modules for GCP like we did about for AWS.
+
+``` 
+$ terraform init
+```
+
+Another apply will destroy the AWS cluster and create a new GCP one.
 
 ```
 $ terraform apply
