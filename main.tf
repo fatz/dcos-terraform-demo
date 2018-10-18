@@ -10,15 +10,21 @@ data "http" "whatismyip" {
 provider "aws" {}
 provider "google" {}
 
+##########################
+##
+## DC/OS Terraform Module
+##
+##########################
+
 module "dcos" {
   source = "dcos-terraform/dcos/aws"
 
-  cluster_name        = "mesosphere-demo-day"
+  cluster_name        = "mesosphere-demo-day-julferts"
   ssh_public_key_file = "~/.ssh/id_rsa.pub"
   admin_ips           = ["${data.http.whatismyip.body}/32"]
 
   num_masters        = "1"
-  num_private_agents = "2"
+  num_private_agents = "1"
   num_public_agents  = "1"
 
   dcos_version = "1.11.5"
@@ -29,10 +35,15 @@ module "dcos" {
 
   dcos_install_mode = "${var.dcos_install_mode}"
   providers {
-    "aws"    = "aws"
+    "aws"    = "aws"    #this is only for demo cases
     "google" = "google"
   }
 }
+
+##########################
+##########################
+##########################
+##########################
 
 output "masters-ips" {
   value = "${module.dcos.masters-ips}"
